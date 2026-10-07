@@ -22,15 +22,16 @@ import asyncio
 import ssl
 from typing import Final
 
-from ..const import ROOT_CA_PEM
+from ..const import SBER_CA_BUNDLE_PEM
 
 
 class SslContextProvider:
-    """Lazy async builder of `ssl.SSLContext` with Russian Trusted Root CA.
+    """Lazy async builder with system CAs and the Russian Trusted CA chain.
 
     Args:
         ca_pem: PEM-encoded CA cert(s) to trust. По умолчанию —
-            `ROOT_CA_PEM` (Russian Trusted Root CA от Минцифры).
+            `SBER_CA_BUNDLE_PEM` (корень и промежуточный CA Минцифры).
+            Загружается в дополнение к системным CA; проверка TLS сохраняется.
 
     Thread/async safety: один `get()` за раз; повторные конкурентные вызовы
     дожидаются первого через asyncio.Lock.
@@ -38,7 +39,7 @@ class SslContextProvider:
 
     __slots__ = ("_ca_pem", "_context", "_lock")
 
-    def __init__(self, ca_pem: str = ROOT_CA_PEM) -> None:
+    def __init__(self, ca_pem: str = SBER_CA_BUNDLE_PEM) -> None:
         self._ca_pem: Final = ca_pem
         self._context: ssl.SSLContext | None = None
         self._lock = asyncio.Lock()
