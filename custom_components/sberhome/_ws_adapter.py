@@ -78,6 +78,7 @@ def make_aiohttp_factory(
         Async factory `(url, headers) -> AiohttpWsAdapter`. Передавай в
         `WebSocketClient(factory=...)`.
     """
+
     async def factory(url: str, headers: dict[str, str]) -> AiohttpWsAdapter:
         ws = await session.ws_connect(
             url,
