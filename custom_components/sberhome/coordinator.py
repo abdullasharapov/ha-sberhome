@@ -1678,7 +1678,7 @@ class SberHomeCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Создать WebSocketClient и крутить его infinite reconnect loop."""
         auth = self._auth_manager
 
-        session = async_get_clientsession(self.hass)  
+        session = async_get_clientsession(self.hass)
         ssl_ctx = await async_init_ssl(self.hass)
         factory = make_aiohttp_factory(session, ssl_context=ssl_ctx)
         router = TopicRouter()
